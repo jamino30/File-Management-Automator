@@ -1,5 +1,4 @@
-# Files - A modern file manager & organizer for Windows/macOS
-
+from tkinter import *
 from os.path import exists, expanduser
 from shutil import move
 from file_types import *
@@ -7,37 +6,59 @@ from file_types import *
 import binascii
 import os
 
-# find home directory, get directory to be organized
-parent_dir = expanduser("~") + "/" + input("Choose a directory to organize: ") + "/"
-dir_files = os.listdir(parent_dir)
+win = Tk()
+win.title("FileOS - A modern file manager")
+win.geometry("750x250")
 
-# ignore .DS_Store and .localized Mac files
-dir_files.pop(dir_files.index(".DS_Store"))
-dir_files.pop(dir_files.index(".localized"))
+label = Label(win, text="FileOS - A modern file manager for Windows/macOS")
+label.pack(pady=20)
 
-for file in dir_files:
-    full_file = parent_dir + file
+entry = Entry(win, width=20)
+entry.focus_set()
+entry.pack(pady=20)
 
-    # open and read file in binary format
-    with open(full_file, "rb") as f:
-        content = f.read()
 
-    # convert binary to hex signatures
-    try:
-        hex_bin = str(binascii.hexlify(content))[2:10].upper()
-    except KeyError:
-        print(f"Error reading the {file}")
+def file_manager():
+    # finds user home directory and gets desired directory to be organized
+    parent_dir = expanduser("~") + "/" + entry.get() + "/"
+    dir_files = os.listdir(parent_dir)
 
-    # create directory with file and its extension
-    for item in bit_ext.keys():
-        if item in hex_bin:
-            directory = bit_ext[item]
-            path = os.path.join(parent_dir, directory)
+    # ignore .DS_Store and .localized Mac files
+    if ".DS_Store" in dir_files:
+        dir_files.pop(dir_files.index(".DS_Store"))
+    if ".localized" in dir_files:
+        dir_files.pop(dir_files.index(".localized"))
 
-            # if directory exists, move the file into it
-            if exists(path):
-                move(full_file, path)
-            # else create new directory first, then move the file into it
-            else:
-                os.mkdir(path)
-                move(full_file, path)
+    for file in dir_files:
+        full_file = parent_dir + file
+
+        # open and read each file in binary format
+        with open(full_file, "rb") as f:
+            content = f.read()
+
+        # convert file binary to hex signatures
+        try:
+            hex_bin = str(binascii.hexlify(content))[2:10].upper()
+        except KeyError:
+            print(f"Error reading the {file}")
+
+        # create a directory with the file and its respective extension
+        for item in bit_ext.keys():
+            if item in hex_bin:
+                directory = bit_ext[item]
+                path = os.path.join(parent_dir, directory)
+
+                # if directory exists, then move the file into it
+                if exists(path):
+                    move(full_file, path)
+                # else create a new one first, then move the file into it
+                else:
+                    os.mkdir(path)
+                    move(full_file, path)
+
+
+button = Button(win, text="Run FileOS", width=20, command=file_manager)
+button.pack(pady=20)
+
+
+win.mainloop()
