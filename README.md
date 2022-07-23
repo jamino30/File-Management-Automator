@@ -6,9 +6,3 @@
 </p>
 
 <img src="https://raw.githubusercontent.com/jamino30/Files/main/fileman-demo.png" alt="FileOS demo" />
-
-## Forking this repo
-
-> My personal website is open source, but please **do not plagiarize**. 
-
-Please give me proper credit by linking back to [jaiamin.com](https://jaiamin.com). Thanks!
