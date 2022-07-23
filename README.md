@@ -1,5 +1,5 @@
 <h1 align="center">
-  FileOS
+  Fileman
 </h1>
 <p align="center">
   A modern file manager and organizer for Windows/macOS
