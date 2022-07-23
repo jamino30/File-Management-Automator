@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog as fd
-from os.path import exists, expanduser
+from os.path import exists
 from shutil import move
 from file_types import *
 
@@ -11,15 +11,21 @@ import os
 # setup tkinter GUI
 win = Tk()
 win.title("FileOS - A modern file manager")
-win.geometry("700x250")
+win.geometry("700x400")
 win.resizable(False, False)
 
-# style widgets
+# default style widgets
 s = ttk.Style()
 s.configure(".", font=("Lato", 15, "bold"))
 
+# logo
+old_image = PhotoImage(file="~/Pictures/bg.png")
+image = old_image.subsample(3, 3)
+logo = Label(win, image=image)
+logo.pack(pady=(20, 0))
+
 heading1 = ttk.Label(win, text="FileOS", font="Lato 30 bold")
-heading1.pack(pady=(50, 0))
+heading1.pack()
 
 heading2 = ttk.Label(win, text="A modern file manager for Windows/macOS", font="Lato 17 bold")
 heading2.pack(pady=(10, 0))
@@ -28,7 +34,6 @@ get_dir_label = ttk.Label(win, text="1. ", font="Lato 15 bold")
 get_dir_label.pack(padx=(80, 5), side="left")
 
 
-# get desired directory
 def get_dir():
     global dir_name
     dir_name = fd.askdirectory()
