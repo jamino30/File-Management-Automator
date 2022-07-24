@@ -7,7 +7,7 @@ from libraries import *
 win = tk.Tk()
 win.title("FileMan - A file management automator")
 
-# window sizing and positioning
+# window setup
 win_width = 700
 win_height = 450
 cen_screen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
@@ -33,7 +33,7 @@ heading2 = ttk.Label(win, text="A file management automator for macOS & Windows 
                      font="Lato 17", wraplength=350, justify="center")
 heading2.pack(pady=(10, 0))
 
-get_dir_num = ttk.Label(win, text="1. ", font="Lato 15 bold")
+get_dir_num = ttk.Label(win, text="1. ", font="Lato 17 bold")
 get_dir_num.pack(pady=(0, 40), padx=(80, 5), side="left")
 
 # initialize with empty text in order to replace text when directory changes
@@ -118,7 +118,7 @@ def file_manager():
 run_script_button = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
 run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
 
-run_script_num = ttk.Label(win, text="2. ", font="Lato 15 bold")
+run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
 run_script_num.pack(pady=(0, 40), side="right")
 
 
