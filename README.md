@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="NaviFile" src="/bg.png/" width="100px" />
+  <img alt="NaviFile" src="logo.svg" width="100px" />
   <h1 align="center">NaviFile</h1>
 </p>
 
