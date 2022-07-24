@@ -29,8 +29,8 @@ logo.pack(pady=(30, 15))
 heading1 = ttk.Label(win, text="NaviFile", font="Lato 30 bold")
 heading1.pack()
 
-heading2 = ttk.Label(win, text="NaviFile is a file management automator for macOS and Windows that makes it"
-                               " easy to organize and navigate through a large variety of files.",
+heading2 = ttk.Label(win, text="A file management automator for macOS & Windows that makes it"
+                               " easy to organize and navigate through a variety of files.",
                      font="Lato 17", wraplength=350, justify="center")
 heading2.pack(pady=(10, 0))
 
