@@ -1,11 +1,11 @@
-# Fileman - A modern file manager and organizer for Windows/macOS
+# FileMan - A modern file manager and organizer for Windows/macOS
 # Designed and built by Jai Amin
 
 from libraries import *
 
 # setup tkinter GUI
 win = tk.Tk()
-win.title("Fileman - A modern file manager")
+win.title("FileMan - A file management automator")
 win.geometry("700x450")
 win.resizable(False, False)
 
@@ -19,7 +19,7 @@ image = old_image.subsample(3, 3)
 logo = ttk.Label(win, image=image)
 logo.pack(pady=(30, 0))
 
-heading1 = ttk.Label(win, text="Fileman", font="Lato 30 bold")
+heading1 = ttk.Label(win, text="FileMan", font="Lato 30 bold")
 heading1.pack()
 
 heading2 = ttk.Label(win, text="A modern file manager for Windows/macOS", font="Lato 17 bold")
@@ -101,11 +101,11 @@ def file_manager():
             continue
             # add read sub-folders option here with if statement
 
-    messagebox.showinfo("Status Update", "Fileman Successful")
+    messagebox.showinfo("Status Update", "FileMan Successful")
 
 
 # When button clicked, file_manager() script runs
-run_script = ttk.Button(win, text="Run Fileman", width=15, command=file_manager)
+run_script = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
 run_script.pack(pady=40, padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 15 bold")
