@@ -101,16 +101,15 @@ def file_manager():
             continue
             # add read sub-folders option here with if statement
 
-    messagebox.showinfo("Status Update", "FileMan Successful")
+    get_dir_label["text"] = "FileMan Completed Successfully."
 
 
 # When button clicked, file_manager() script runs
-run_script = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
-run_script.pack(pady=40, padx=(5, 80), side="right")
+run_script_button = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
+run_script_button.pack(pady=40, padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 15 bold")
 run_script_num.pack(side="right")
 
 
 win.mainloop()
-
