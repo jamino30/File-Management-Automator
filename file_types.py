@@ -1,12 +1,14 @@
-# Supported file signatures
+# NaviFile supported file signatures
+# Key: Hexadecimal signature
+# Value: File format type
 
-bit_ext = {
+hexa_sig = {
     # Image file formats
     "---1": "Adobe Illustrator .ai",
     "424D": "Bitmap",
     "47494638": "GIF",
     "00000100": "ICO",
-    "FFD8FFE": "JPEG",
+    "FFD8FF": "JPEG",
     "89504E47": "PNG",
     "252150": "PostScript",
     "38425053": "PSD",
@@ -108,8 +110,8 @@ bit_ext = {
     "---30": "XHTML .xhtml",
     # Presentation file formats
     "---31": "Keynote .key",
-    "D0CF11E0": "PowerPoint presentation",
-    "504B0304": "PowerPoint Open XML",
+    "D0CF11E0": "PowerPoint",
+    "504B0304": "PowerPoint",
     # Other programming file formats
     "---32": "C and C++ .c",
     "---33": "Java .class",
