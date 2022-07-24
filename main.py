@@ -17,7 +17,8 @@ win.resizable(False, False)
 
 # default style widgets
 s = ttk.Style()
-s.configure(".", font=("Lato", 14, "bold"))
+s.configure(".", font="Lato 14 bold")
+s.configure("TButton", font="Lato 16")
 
 # logo
 old_image = tk.PhotoImage(file="~/Pictures/bg.png")
@@ -111,7 +112,7 @@ def file_manager():
 
     # once NaviFile runs successfully, do:
     call(["open", parent_dir])
-    get_dir_label["text"] = "NaviFile Completed Successfully."
+    get_dir_label["text"] = "NaviFile Complete."
 
 
 # when button clicked, file_manager() script runs
