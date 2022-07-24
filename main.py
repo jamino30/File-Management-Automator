@@ -22,11 +22,13 @@ logo.pack(pady=(30, 0))
 heading1 = ttk.Label(win, text="FileMan", font="Lato 30 bold")
 heading1.pack()
 
-heading2 = ttk.Label(win, text="A modern file manager for Windows/macOS", font="Lato 17 bold")
+heading2 = ttk.Label(win, text="A file management automator for macOS & Windows that makes it quick and"
+                               " easy to organize a large variety of files.",
+                     font="Lato 17", wraplength=350, justify="center")
 heading2.pack(pady=(10, 0))
 
 get_dir_num = ttk.Label(win, text="1. ", font="Lato 15 bold")
-get_dir_num.pack(padx=(80, 5), side="left")
+get_dir_num.pack(pady=(0, 40), padx=(80, 5), side="left")
 
 # initialize with empty text in order to replace text when directory changes
 get_dir_label = ttk.Label(win, text="", wraplength=500)
@@ -36,7 +38,7 @@ def get_dir():
     global dir_name
 
     # ask user to select directory and display selection as label
-    dir_name = filedialog.askdirectory()
+    dir_name = filedialog.askdirectory(mustexist=True)
     get_dir_label["text"] = dir_name
     get_dir_label.pack(padx=(0, 0))
     get_dir_label.place(relx=0.15, rely=0.85)
@@ -46,7 +48,7 @@ def get_dir():
 
 
 get_dir_button = ttk.Button(win, text="Choose directory", width=15, command=get_dir)
-get_dir_button.pack(side="left")
+get_dir_button.pack(pady=(0, 40), side="left")
 
 
 def file_manager():
@@ -101,15 +103,18 @@ def file_manager():
             continue
             # add read sub-folders option here with if statement
 
+    # once FileMan runs successfully, do:
+    filedialog.Open(parent_dir)
     get_dir_label["text"] = "FileMan Completed Successfully."
 
 
-# When button clicked, file_manager() script runs
+# when button clicked, file_manager() script runs
 run_script_button = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
-run_script_button.pack(pady=40, padx=(5, 80), side="right")
+run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 15 bold")
-run_script_num.pack(side="right")
+run_script_num.pack(pady=(0, 40), side="right")
 
 
 win.mainloop()
+
