@@ -37,5 +37,7 @@ python3 get-pip.py
 pip install tk
 ```
 
+## Screenshots
 
+<img alt="NaviFile demo" src="demo.png"/>
 
