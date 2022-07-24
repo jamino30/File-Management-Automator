@@ -5,11 +5,11 @@ from libraries import *
 
 # setup tkinter GUI
 win = tk.Tk()
-win.title("NaviFile - A file management automator")
+win.title("NaviFile - File Management Made Easy")
 
 # window setup
 win_width = 700
-win_height = 450
+win_height = 400
 cen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
 cen_height = int(win.winfo_screenheight()/2 - (win_height/2))
 win.geometry(f"{win_width}x{win_height}+{cen_width}+{cen_height}")
@@ -21,16 +21,16 @@ s.configure(".", font="Lato 14 bold")
 s.configure("TButton", font="Lato 16")
 
 # logo
-old_image = tk.PhotoImage(file="~/Pictures/bg.png")
-image = old_image.subsample(3, 3)
+old_image = tk.PhotoImage(file="~/Pictures/navifile/logo.png")
+image = old_image.subsample(2, 2)
 logo = ttk.Label(win, image=image)
-logo.pack(pady=(30, 0))
+logo.pack(pady=(30, 15))
 
 heading1 = ttk.Label(win, text="NaviFile", font="Lato 30 bold")
 heading1.pack()
 
-heading2 = ttk.Label(win, text="A file management automator for macOS & Windows that makes it quick and"
-                               " easy to organize a large variety of files.",
+heading2 = ttk.Label(win, text="NaviFile is a file management automator for macOS and Windows that makes it"
+                               " easy to organize and navigate through a large variety of files.",
                      font="Lato 17", wraplength=350, justify="center")
 heading2.pack(pady=(10, 0))
 
@@ -48,7 +48,7 @@ def get_dir():
     dir_name = filedialog.askdirectory(mustexist=True)
     get_dir_label["text"] = dir_name
     get_dir_label.pack(padx=(0, 0))
-    get_dir_label.place(relx=0.15, rely=0.85)
+    get_dir_label.place(relx=0.15, rely=0.83)
 
     # change button features once directory selected
     get_dir_button["text"] = "Change directory"
@@ -122,6 +122,4 @@ run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
 run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
 run_script_num.pack(pady=(0, 40), side="right")
 
-
 win.mainloop()
-
