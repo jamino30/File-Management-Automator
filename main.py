@@ -17,7 +17,7 @@ win.resizable(False, False)
 
 # default style widgets
 s = ttk.Style()
-s.configure(".", font=("Lato", 15, "bold"))
+s.configure(".", font=("Lato", 14, "bold"))
 
 # logo
 old_image = tk.PhotoImage(file="~/Pictures/bg.png")
