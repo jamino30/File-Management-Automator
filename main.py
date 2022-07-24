@@ -6,7 +6,13 @@ from libraries import *
 # setup tkinter GUI
 win = tk.Tk()
 win.title("FileMan - A file management automator")
-win.geometry("700x450")
+
+# window sizing and positioning
+win_width = 700
+win_height = 450
+cen_screen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
+cen_screen_height = int(win.winfo_screenheight()/2 - (win_height/2))
+win.geometry(f"{win_width}x{win_height}+{cen_screen_width}+{cen_screen_height}")
 win.resizable(False, False)
 
 # default style widgets
