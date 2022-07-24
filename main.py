@@ -5,7 +5,7 @@ from libraries import *
 
 # setup tkinter GUI
 win = tk.Tk()
-win.title("FileOS - A modern file manager")
+win.title("Fileman - A modern file manager")
 win.geometry("700x450")
 win.resizable(False, False)
 
@@ -76,25 +76,32 @@ def file_manager():
 
             # create a directory with the file and its respective extension
             for item in bit_ext.keys():
-                if item in hex_bin:
-                    directory = bit_ext[item]
-                    path = os.path.join(parent_dir, directory)
 
-                    try:
-                        # if directory exists, then move the file into it
-                        if exists(path):
-                            move(full_file, path)
+                def path_exists(p):
+                    if exists(p):
+                        move(full_file, p)
                         # else create a new one first, then move the file into it
-                        else:
-                            os.mkdir(path)
-                            move(full_file, path)
+                    else:
+                        os.mkdir(p)
+                        move(full_file, p)
 
-                    except FileNotFoundError:
-                        continue
+                try:
+                    if item in hex_bin:
+                        directory = bit_ext[item]
+                        path = os.path.join(parent_dir, directory)
+                        path_exists(path)
+
+                except FileNotFoundError:
+                    dir_unknown = "Unknown"
+                    path_unknown = os.path.join(parent_dir, dir_unknown)
+                    path_exists(path_unknown)
+                    continue
 
         except IsADirectoryError:
             continue
-            # add read sub-folders option here
+            # add read sub-folders option here with if statement
+
+    messagebox.showinfo("Status Update", "Fileman Successful")
 
 
 # When button clicked, file_manager() script runs
@@ -106,3 +113,4 @@ run_script_num.pack(side="right")
 
 
 win.mainloop()
+
