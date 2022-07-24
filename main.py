@@ -1,18 +1,18 @@
-# FileMan - A modern file manager and organizer for Windows/macOS
+# NaviFile - A file management automator for macOS and Windows
 # Designed and built by Jai Amin
 
 from libraries import *
 
 # setup tkinter GUI
 win = tk.Tk()
-win.title("FileMan - A file management automator")
+win.title("NaviFile - A file management automator")
 
 # window setup
 win_width = 700
 win_height = 450
-cen_screen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
-cen_screen_height = int(win.winfo_screenheight()/2 - (win_height/2))
-win.geometry(f"{win_width}x{win_height}+{cen_screen_width}+{cen_screen_height}")
+cen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
+cen_height = int(win.winfo_screenheight()/2 - (win_height/2))
+win.geometry(f"{win_width}x{win_height}+{cen_width}+{cen_height}")
 win.resizable(False, False)
 
 # default style widgets
@@ -25,7 +25,7 @@ image = old_image.subsample(3, 3)
 logo = ttk.Label(win, image=image)
 logo.pack(pady=(30, 0))
 
-heading1 = ttk.Label(win, text="FileMan", font="Lato 30 bold")
+heading1 = ttk.Label(win, text="NaviFile", font="Lato 30 bold")
 heading1.pack()
 
 heading2 = ttk.Label(win, text="A file management automator for macOS & Windows that makes it quick and"
@@ -83,7 +83,7 @@ def file_manager():
                 print(f"Error reading the {file}")
 
             # create a directory with the file and its respective extension
-            for item in bit_ext.keys():
+            for item in hexa_sig.keys():
 
                 def path_exists(p):
                     if exists(p):
@@ -95,7 +95,7 @@ def file_manager():
 
                 try:
                     if item in hex_bin:
-                        directory = bit_ext[item]
+                        directory = hexa_sig[item]
                         path = os.path.join(parent_dir, directory)
                         path_exists(path)
 
@@ -109,13 +109,13 @@ def file_manager():
             continue
             # add read sub-folders option here with if statement
 
-    # once FileMan runs successfully, do:
+    # once NaviFile runs successfully, do:
     call(["open", parent_dir])
-    get_dir_label["text"] = "FileMan Completed Successfully."
+    get_dir_label["text"] = "NaviFile Completed Successfully."
 
 
 # when button clicked, file_manager() script runs
-run_script_button = ttk.Button(win, text="Run FileMan", width=15, command=file_manager)
+run_script_button = ttk.Button(win, text="Run NaviFile", width=15, command=file_manager)
 run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
