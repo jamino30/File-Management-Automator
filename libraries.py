@@ -1,4 +1,4 @@
-# Libraries used for Fileman
+# FileMan libraries
 
 from tkinter import ttk, filedialog, messagebox
 from os.path import exists
