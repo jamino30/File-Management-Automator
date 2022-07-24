@@ -110,7 +110,7 @@ def file_manager():
             # add read sub-folders option here with if statement
 
     # once FileMan runs successfully, do:
-    filedialog.Open(parent_dir)
+    call(["open", parent_dir])
     get_dir_label["text"] = "FileMan Completed Successfully."
 
 
