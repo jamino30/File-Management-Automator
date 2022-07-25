@@ -17,8 +17,8 @@ win.resizable(False, False)
 
 # default style widgets
 s = ttk.Style()
-s.configure(".", font="Lato 14 bold")
-s.configure("TButton", font="Lato 16")
+s.configure(".", font="Lato 14")
+s.configure("TButton", font="Lato 15")
 
 # logo
 old_image = tk.PhotoImage(file="~/Pictures/navifile/logo.png")
@@ -35,10 +35,10 @@ heading2 = ttk.Label(win, text="A file management automator for macOS & Windows 
 heading2.pack(pady=(10, 0))
 
 get_dir_num = ttk.Label(win, text="1. ", font="Lato 17 bold")
-get_dir_num.pack(pady=(0, 40), padx=(80, 5), side="left")
+get_dir_num.pack(pady=(0, 75), padx=(80, 5), side="left")
 
 # initialize with empty text in order to replace text when directory changes
-get_dir_label = ttk.Label(win, text="", wraplength=500)
+get_dir_label = ttk.Label(win, text="", wraplength=500, font="Lato 14 bold")
 
 
 def get_dir():
@@ -46,22 +46,30 @@ def get_dir():
 
     # ask user to select directory and display selection as label
     dir_name = filedialog.askdirectory(mustexist=True)
-    get_dir_label["text"] = f"Chosen directory: {dir_name}"
+    short_dir_name = "📂 " + dir_name.split("/")[-1]
+
+    if dir_name == "":
+        short_dir_name = "❌ None"
+        progress_bar["value"] = 0
+    else:
+        progress_bar["value"] = 50
+
+    get_dir_label["text"] = f"Selected folder:  {short_dir_name}"
     get_dir_label.pack(padx=(0, 0))
-    get_dir_label.place(relx=0.15, rely=0.87)
+    get_dir_label.place(relx=0.15, rely=0.858)
 
     # change button features once directory selected
-    get_dir_button["text"] = "Change directory"
+    get_dir_button["text"] = "Change folder"
 
 
-get_dir_button = ttk.Button(win, text="Choose directory", width=15, command=get_dir)
-get_dir_button.pack(pady=(0, 40), side="left")
+get_dir_button = ttk.Button(win, text="Choose folder", width=15, command=get_dir)
+get_dir_button.pack(pady=(0, 75), side="left")
 
 var1 = tk.IntVar()
 include_subf = ttk.Checkbutton(win, text="Include subfolders", variable=var1,
                                onvalue=1, offvalue=0)
 include_subf.pack(padx=(0, 0))
-include_subf.place(relx=0.1535, rely=0.795)
+include_subf.place(relx=0.1535, rely=0.775)
 
 
 def file_manager(directory):
@@ -120,8 +128,6 @@ def file_manager(directory):
                 if var1.get() == 1:
                     sub_parent = f"{dir_name}/{file}"
                     file_manager(sub_parent)
-                else:
-                    continue
             except FileNotFoundError:
                 continue
             # add read sub-folders option here with if statement
@@ -129,15 +135,21 @@ def file_manager(directory):
 
 def success_actions():
     call(["open", dir_name])
-    get_dir_label["text"] = "NaviFile Complete."
+    get_dir_label["text"] = "Changes made successfully ✅"
+    progress_bar["value"] = 100
 
 
 # when button clicked, file_manager() script runs
-run_script_button = ttk.Button(win, text="Run NaviFile", width=15,
-                               command=lambda: [file_manager(dir_name), success_actions()])
-run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
+run_script_button = ttk.Button(win, text="Make changes", width=15,
+                               command=lambda: [file_manager(dir_name),
+                                                success_actions()])
+run_script_button.pack(pady=(0, 75), padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
-run_script_num.pack(pady=(0, 40), side="right")
+run_script_num.pack(pady=(0, 75), side="right")
+
+progress_bar = ttk.Progressbar(win, orient="horizontal", length=100,
+                               mode="determinate", value=0)
+progress_bar.pack(side="bottom", pady=(0, 10))
 
 win.mainloop()
