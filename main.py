@@ -51,12 +51,16 @@ def get_dir():
     if dir_name == "":
         short_dir_name = "❌ None"
         progress_bar["value"] = 0
+        run_script_button.state(["disabled"])
+        run_script_button["text"] = "Complete step 1"
     else:
         progress_bar["value"] = 50
+        run_script_button.state(["!disabled"])
+        run_script_button["text"] = "Make changes"
 
     get_dir_label["text"] = f"Selected folder:  {short_dir_name}"
     get_dir_label.pack(padx=(0, 0))
-    get_dir_label.place(relx=0.15, rely=0.858)
+    get_dir_label.place(relx=0.15, rely=0.85)
 
     # change button features once directory selected
     get_dir_button["text"] = "Change folder"
@@ -69,7 +73,7 @@ var1 = tk.IntVar()
 include_subf = ttk.Checkbutton(win, text="Include subfolders", variable=var1,
                                onvalue=1, offvalue=0)
 include_subf.pack(padx=(0, 0))
-include_subf.place(relx=0.1535, rely=0.775)
+include_subf.place(relx=0.1537, rely=0.766)
 
 
 def file_manager(directory):
@@ -140,10 +144,11 @@ def success_actions():
 
 
 # when button clicked, file_manager() script runs
-run_script_button = ttk.Button(win, text="Make changes", width=15,
+run_script_button = ttk.Button(win, text="Complete step 1", width=15,
                                command=lambda: [file_manager(dir_name),
                                                 success_actions()])
 run_script_button.pack(pady=(0, 75), padx=(5, 80), side="right")
+run_script_button.state(["disabled"])
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
 run_script_num.pack(pady=(0, 75), side="right")
