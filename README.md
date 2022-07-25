@@ -39,5 +39,5 @@ pip install tk
 
 ## Screenshots
 
-<img alt="NaviFile demo" src="demo.png"/>
+<img alt="NaviFile demo" src="navifile-demo.png"/>
 
