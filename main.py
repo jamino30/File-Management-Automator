@@ -9,7 +9,7 @@ win.title("NaviFile - File Management Made Easy")
 
 # window setup
 win_width = 700
-win_height = 400
+win_height = 450
 cen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
 cen_height = int(win.winfo_screenheight()/2 - (win_height/2))
 win.geometry(f"{win_width}x{win_height}+{cen_width}+{cen_height}")
@@ -46,9 +46,9 @@ def get_dir():
 
     # ask user to select directory and display selection as label
     dir_name = filedialog.askdirectory(mustexist=True)
-    get_dir_label["text"] = dir_name
+    get_dir_label["text"] = f"Chosen directory: {dir_name}"
     get_dir_label.pack(padx=(0, 0))
-    get_dir_label.place(relx=0.15, rely=0.83)
+    get_dir_label.place(relx=0.15, rely=0.87)
 
     # change button features once directory selected
     get_dir_button["text"] = "Change directory"
@@ -57,10 +57,16 @@ def get_dir():
 get_dir_button = ttk.Button(win, text="Choose directory", width=15, command=get_dir)
 get_dir_button.pack(pady=(0, 40), side="left")
 
+var1 = tk.IntVar()
+include_subf = ttk.Checkbutton(win, text="Include subfolders", variable=var1,
+                               onvalue=1, offvalue=0)
+include_subf.pack(padx=(0, 0))
+include_subf.place(relx=0.1535, rely=0.795)
 
-def file_manager():
+
+def file_manager(directory):
     # finds user home directory and gets desired directory
-    parent_dir = dir_name + "/"
+    parent_dir = f"{directory}/"
     dir_files = os.listdir(parent_dir)
 
     # ignore .DS_Store and .localized Mac files
@@ -74,8 +80,11 @@ def file_manager():
             full_file = parent_dir + file
 
             # open and read each file in binary format
-            with open(full_file, "rb") as f:
-                content = f.read()
+            try:
+                with open(full_file, "rb") as f:
+                    content = f.read()
+            except RecursionError:
+                continue
 
             # convert file binary to hex signatures
             try:
@@ -107,16 +116,25 @@ def file_manager():
                     continue
 
         except IsADirectoryError:
-            continue
+            try:
+                if var1.get() == 1:
+                    sub_parent = f"{dir_name}/{file}"
+                    file_manager(sub_parent)
+                else:
+                    continue
+            except FileNotFoundError:
+                continue
             # add read sub-folders option here with if statement
 
-    # once NaviFile runs successfully, do:
-    call(["open", parent_dir])
+
+def success_actions():
+    call(["open", dir_name])
     get_dir_label["text"] = "NaviFile Complete."
 
 
 # when button clicked, file_manager() script runs
-run_script_button = ttk.Button(win, text="Run NaviFile", width=15, command=file_manager)
+run_script_button = ttk.Button(win, text="Run NaviFile", width=15,
+                               command=lambda: [file_manager(dir_name), success_actions()])
 run_script_button.pack(pady=(0, 40), padx=(5, 80), side="right")
 
 run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
