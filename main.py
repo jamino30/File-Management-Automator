@@ -49,27 +49,31 @@ class HomePage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        self.heading = ttk.Label(self, text="Welcome to NaviFile", font="Lato 20 bold")
-        self.heading.pack(pady=10, padx=10)
+        old_image = tk.PhotoImage(file="logo.png")
+        image = old_image.subsample(2, 2)
+        logo = tk.Label(self, image=image)
+        logo.pack()
 
-        self.description = ttk.Label(self, text="NaviFile is a management tool.",
-                                     font="Lato 16", wraplength=400)
-        self.description.pack(pady=10, padx=10)
+        heading = ttk.Label(self, text="Welcome to NaviFile", font="Lato 20 bold")
+        heading.pack(pady=10, padx=10)
 
-        self.continue_button = ttk.Button(self, text="Continue",
-                                          command=lambda: controller.show_frame(MainPage))
-        self.continue_button.pack()
+        description = ttk.Label(self, text="NaviFile is a management tool.", font="Lato 16", wraplength=400)
+        description.pack(pady=10, padx=10)
+
+        continue_button = ttk.Button(self, text="Continue",
+                                     command=lambda: controller.show_frame(MainPage))
+        continue_button.pack()
 
 
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
 
-        self.label = tk.Label(self, text="Instructions")
-        self.label.pack(pady=10, padx=10)
+        label = tk.Label(self, text="Instructions")
+        label.pack(pady=10, padx=10)
 
-        self.get_dir_num = ttk.Label(self, text="1. ", font="Lato 17 bold")
-        self.get_dir_num.pack(pady=(0, 75), padx=(80, 5), side="left")
+        get_dir_num = ttk.Label(self, text="1. ", font="Lato 17 bold")
+        get_dir_num.pack(pady=(0, 75), padx=(80, 5), side="left")
 
         # initialize with empty text in order to replace text when directory changes
         self.get_dir_label = ttk.Label(self, text="", wraplength=500, font="Lato 14 bold")
@@ -79,10 +83,9 @@ class MainPage(tk.Frame):
         self.get_dir_button.pack(pady=(0, 75), side="left")
 
         self.var1 = tk.IntVar()
-        self.include_subf = ttk.Checkbutton(self, text="Include subfolders", variable=self.var1,
-                                            onvalue=1, offvalue=0)
-        self.include_subf.pack(padx=(0, 0))
-        self.include_subf.place(relx=0.1537, rely=0.766)
+        include_subf = ttk.Checkbutton(self, text="Include subfolders", variable=self.var1, onvalue=1, offvalue=0)
+        include_subf.pack(padx=(0, 0))
+        include_subf.place(relx=0.1537, rely=0.766)
 
         # when button clicked, file_manager() script runs
         self.run_script_button = ttk.Button(self, text="Complete step 1", width=15,
@@ -91,13 +94,11 @@ class MainPage(tk.Frame):
         self.run_script_button.pack(pady=(0, 75), padx=(5, 80), side="right")
         self.run_script_button.state(["disabled"])
 
-        self.run_script_num = ttk.Label(self, text="2. ", font="Lato 17 bold")
-        self.run_script_num.pack(pady=(0, 75), side="right")
+        run_script_num = ttk.Label(self, text="2. ", font="Lato 17 bold")
+        run_script_num.pack(pady=(0, 75), side="right")
 
-        self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=100,
-                                            mode="determinate", value=0)
+        self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=100, mode="determinate", value=0)
         self.progress_bar.pack(side="bottom", pady=(0, 10))
-
 
     def get_dir(self):
         # ask user to select directory and display selection as label
@@ -187,5 +188,6 @@ class MainPage(tk.Frame):
         self.progress_bar["value"] = 100
 
 
-app = MainApplication()
-app.mainloop()
+if __name__ == "__main__":
+    app = MainApplication()
+    app.mainloop()
