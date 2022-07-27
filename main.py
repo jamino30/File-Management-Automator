@@ -135,6 +135,8 @@ class MainPage(tk.Frame):
         self.run_script_button.state(["disabled"])
         self.run_script_button.place(relx=0.15, rely=0.83)
 
+        self.success_message = ttk.Label(self, text="", font="Lato 14 bold")
+
         self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=100, mode="determinate", value=0)
         self.progress_bar.pack(side="bottom")
 
@@ -156,6 +158,7 @@ class MainPage(tk.Frame):
         self.get_dir_label["text"] = short_dir_name
         self.get_dir_label.pack()
         self.get_dir_label.place(relx=0.41, rely=0.3275)
+        self.success_message["text"] = ""
 
         # change button features once directory selected
         self.get_dir_button["text"] = "Change folder"
@@ -222,8 +225,9 @@ class MainPage(tk.Frame):
 
     def success_actions(self):
         call(["open", self.dir_name])
-        self.get_dir_label["text"] = "Changes made successfully ✅"
         self.progress_bar["value"] = 100
+        self.success_message["text"] = "Changes made successfully ✅"
+        self.success_message.place(relx=0.41, rely=0.8375)
 
 
 if __name__ == "__main__":
