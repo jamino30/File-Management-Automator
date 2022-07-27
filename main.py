@@ -122,7 +122,7 @@ class MainPage(tk.Frame):
         run_script_num.place(relx=0.1, rely=0.7)
 
         run_script_button_desc = ttk.Label(self, text="Before you \"Make changes\", confirm your selected folder.\n"
-                                                      "Any changes made are not unreversible once made.",
+                                                      "Any changes made are irreversible once made.",
                                            font="Lato 15", wraplength=515)
         run_script_button_desc.pack()
         run_script_button_desc.place(relx=0.15, rely=0.7)
