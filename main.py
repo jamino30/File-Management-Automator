@@ -1,160 +1,191 @@
-# NaviFile - A file management automator for macOS and Windows
+# NaviFile - A file management automator for macOS and selfdows
 # Designed and built by Jai Amin
 
-from libraries import *
+from tkinter import ttk, filedialog
+from os.path import exists
+from shutil import move
+from file_types import hexa_sig
+from subprocess import call
 
-# setup tkinter GUI
-win = tk.Tk()
-win.title("NaviFile - File Management Made Easy")
-
-# window setup
-win_width = 700
-win_height = 450
-cen_width = int(win.winfo_screenwidth()/2 - (win_width/2))
-cen_height = int(win.winfo_screenheight()/2 - (win_height/2))
-win.geometry(f"{win_width}x{win_height}+{cen_width}+{cen_height}")
-win.resizable(False, False)
-
-# default style widgets
-s = ttk.Style()
-s.configure(".", font="Lato 14")
-s.configure("TButton", font="Lato 15")
-
-# logo
-old_image = tk.PhotoImage(file="~/Pictures/navifile/logo.png")
-image = old_image.subsample(2, 2)
-logo = ttk.Label(win, image=image)
-logo.pack(pady=(30, 15))
-
-heading1 = ttk.Label(win, text="NaviFile", font="Lato 30 bold")
-heading1.pack()
-
-heading2 = ttk.Label(win, text="A file management automator for macOS & Windows that makes it"
-                               " easy to organize and navigate through a variety of files.",
-                     font="Lato 17", wraplength=350, justify="center")
-heading2.pack(pady=(10, 0))
-
-get_dir_num = ttk.Label(win, text="1. ", font="Lato 17 bold")
-get_dir_num.pack(pady=(0, 75), padx=(80, 5), side="left")
-
-# initialize with empty text in order to replace text when directory changes
-get_dir_label = ttk.Label(win, text="", wraplength=500, font="Lato 14 bold")
+import binascii as bin
+import os as os
+import tkinter as tk
 
 
-def get_dir():
-    global dir_name
+class MainApplication(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        tk.Tk.__init__(self, *args, **kwargs)
 
-    # ask user to select directory and display selection as label
-    dir_name = filedialog.askdirectory(mustexist=True)
-    short_dir_name = "📂 " + dir_name.split("/")[-1]
+        # configure window sizing
+        self_width = 700
+        self_height = 450
+        cen_width = int(self.winfo_screenwidth() / 2 - (self_width / 2))
+        cen_height = int(self.winfo_screenheight() / 2 - (self_height / 2))
+        self.geometry(f"{self_width}x{self_height}+{cen_width}+{cen_height}")
+        self.resizable(False, False)
 
-    if dir_name == "":
-        short_dir_name = "❌ None"
-        progress_bar["value"] = 0
-        run_script_button.state(["disabled"])
-        run_script_button["text"] = "Complete step 1"
-    else:
-        progress_bar["value"] = 50
-        run_script_button.state(["!disabled"])
-        run_script_button["text"] = "Make changes"
+        # initialize container
+        container = tk.Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
 
-    get_dir_label["text"] = f"Selected folder:  {short_dir_name}"
-    get_dir_label.pack(padx=(0, 0))
-    get_dir_label.place(relx=0.15, rely=0.85)
+        # initialize frames
+        self.frames = {}
+        for F in (HomePage, MainPage):
+            frame = F(container, self)
+            self.frames[F] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
 
-    # change button features once directory selected
-    get_dir_button["text"] = "Change folder"
+        # show home page frame first
+        self.show_frame(HomePage)
 
-
-get_dir_button = ttk.Button(win, text="Choose folder", width=15, command=get_dir)
-get_dir_button.pack(pady=(0, 75), side="left")
-
-var1 = tk.IntVar()
-include_subf = ttk.Checkbutton(win, text="Include subfolders", variable=var1,
-                               onvalue=1, offvalue=0)
-include_subf.pack(padx=(0, 0))
-include_subf.place(relx=0.1537, rely=0.766)
+    def show_frame(self, cont):
+        frame = self.frames[cont]
+        frame.tkraise()
 
 
-def file_manager(directory):
-    # finds user home directory and gets desired directory
-    parent_dir = f"{directory}/"
-    dir_files = os.listdir(parent_dir)
+class HomePage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
 
-    # ignore .DS_Store and .localized Mac files
-    if ".DS_Store" in dir_files:
-        dir_files.pop(dir_files.index(".DS_Store"))
-    if ".localized" in dir_files:
-        dir_files.pop(dir_files.index(".localized"))
+        self.heading = ttk.Label(self, text="Welcome to NaviFile", font="Lato 20 bold")
+        self.heading.pack(pady=10, padx=10)
 
-    for file in dir_files:
-        try:
-            full_file = parent_dir + file
+        self.description = ttk.Label(self, text="NaviFile is a management tool.",
+                                     font="Lato 16", wraplength=400)
+        self.description.pack(pady=10, padx=10)
 
-            # open and read each file in binary format
+        self.continue_button = ttk.Button(self, text="Continue",
+                                          command=lambda: controller.show_frame(MainPage))
+        self.continue_button.pack()
+
+
+class MainPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+
+        self.label = tk.Label(self, text="Instructions")
+        self.label.pack(pady=10, padx=10)
+
+        self.get_dir_num = ttk.Label(self, text="1. ", font="Lato 17 bold")
+        self.get_dir_num.pack(pady=(0, 75), padx=(80, 5), side="left")
+
+        # initialize with empty text in order to replace text when directory changes
+        self.get_dir_label = ttk.Label(self, text="", wraplength=500, font="Lato 14 bold")
+
+        self.get_dir_button = ttk.Button(self, text="Choose folder", width=15,
+                                         command=self.get_dir)
+        self.get_dir_button.pack(pady=(0, 75), side="left")
+
+        self.var1 = tk.IntVar()
+        self.include_subf = ttk.Checkbutton(self, text="Include subfolders", variable=self.var1,
+                                            onvalue=1, offvalue=0)
+        self.include_subf.pack(padx=(0, 0))
+        self.include_subf.place(relx=0.1537, rely=0.766)
+
+        # when button clicked, file_manager() script runs
+        self.run_script_button = ttk.Button(self, text="Complete step 1", width=15,
+                                            command=lambda: [self.file_manager(self.dir_name),
+                                                             self.success_actions()])
+        self.run_script_button.pack(pady=(0, 75), padx=(5, 80), side="right")
+        self.run_script_button.state(["disabled"])
+
+        self.run_script_num = ttk.Label(self, text="2. ", font="Lato 17 bold")
+        self.run_script_num.pack(pady=(0, 75), side="right")
+
+        self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=100,
+                                            mode="determinate", value=0)
+        self.progress_bar.pack(side="bottom", pady=(0, 10))
+
+
+    def get_dir(self):
+        # ask user to select directory and display selection as label
+        self.dir_name = filedialog.askdirectory(mustexist=True)
+        short_dir_name = "📂 " + self.dir_name.split("/")[-1]
+
+        if self.dir_name == "":
+            short_dir_name = "❌ None"
+            self.progress_bar["value"] = 0
+            self.run_script_button.state(["disabled"])
+            self.run_script_button["text"] = "Complete step 1"
+        else:
+            self.progress_bar["value"] = 50
+            self.run_script_button.state(["!disabled"])
+            self.run_script_button["text"] = "Make changes"
+
+        self.get_dir_label["text"] = f"Selected folder:  {short_dir_name}"
+        self.get_dir_label.pack(padx=(0, 0))
+        self.get_dir_label.place(relx=0.15, rely=0.85)
+
+        # change button features once directory selected
+        self.get_dir_button["text"] = "Change folder"
+
+    def file_manager(self, directory):
+        # finds user home directory and gets desired directory
+        parent_dir = f"{directory}/"
+        dir_files = os.listdir(parent_dir)
+
+        # ignore .DS_Store and .localized Mac files
+        if ".DS_Store" in dir_files:
+            dir_files.pop(dir_files.index(".DS_Store"))
+        if ".localized" in dir_files:
+            dir_files.pop(dir_files.index(".localized"))
+
+        for file in dir_files:
             try:
-                with open(full_file, "rb") as f:
-                    content = f.read()
-            except RecursionError:
-                continue
+                full_file = parent_dir + file
 
-            # convert file binary to hex signatures
-            try:
-                hex_bin = str(binascii.hexlify(content))[2:10].upper()
-            except KeyError:
-                print(f"Error reading the {file}")
-
-            # create a directory with the file and its respective extension
-            for item in hexa_sig.keys():
-
-                def path_exists(p):
-                    if exists(p):
-                        move(full_file, p)
-                        # else create a new one first, then move the file into it
-                    else:
-                        os.mkdir(p)
-                        move(full_file, p)
-
+                # open and read each file in binary format
                 try:
-                    if item in hex_bin:
-                        directory = hexa_sig[item]
-                        path = os.path.join(parent_dir, directory)
-                        path_exists(path)
-
-                except FileNotFoundError:
-                    dir_unknown = "Unknown"
-                    path_unknown = os.path.join(parent_dir, dir_unknown)
-                    path_exists(path_unknown)
+                    with open(full_file, "rb") as f:
+                        content = f.read()
+                except RecursionError:
                     continue
 
-        except IsADirectoryError:
-            try:
-                if var1.get() == 1:
-                    sub_parent = f"{dir_name}/{file}"
-                    file_manager(sub_parent)
-            except FileNotFoundError:
-                continue
-            # add read sub-folders option here with if statement
+                # convert file binary to hex signatures
+                try:
+                    hex_bin = str(bin.hexlify(content))[2:10].upper()
+                except KeyError:
+                    print(f"Error reading the {file}")
+
+                # create a directory with the file and its respective extension
+                for item in hexa_sig.keys():
+
+                    def path_exists(p):
+                        if exists(p):
+                            move(full_file, p)
+                            # else create a new one first, then move the file into it
+                        else:
+                            os.mkdir(p)
+                            move(full_file, p)
+
+                    try:
+                        if item in hex_bin:
+                            directory = hexa_sig[item]
+                            path = os.path.join(parent_dir, directory)
+                            path_exists(path)
+
+                    except FileNotFoundError:
+                        dir_unknown = "Unknown"
+                        path_unknown = os.path.join(parent_dir, dir_unknown)
+                        path_exists(path_unknown)
+                        continue
+
+            except IsADirectoryError:
+                try:
+                    if self.var1.get() == 1:
+                        sub_parent = f"{self.dir_name}/{file}"
+                        self.file_manager(sub_parent)
+                except FileNotFoundError:
+                    continue
+                # add read sub-folders option here with if statement
+
+    def success_actions(self):
+        call(["open", self.dir_name])
+        self.get_dir_label["text"] = "Changes made successfully ✅"
+        self.progress_bar["value"] = 100
 
 
-def success_actions():
-    call(["open", dir_name])
-    get_dir_label["text"] = "Changes made successfully ✅"
-    progress_bar["value"] = 100
-
-
-# when button clicked, file_manager() script runs
-run_script_button = ttk.Button(win, text="Complete step 1", width=15,
-                               command=lambda: [file_manager(dir_name),
-                                                success_actions()])
-run_script_button.pack(pady=(0, 75), padx=(5, 80), side="right")
-run_script_button.state(["disabled"])
-
-run_script_num = ttk.Label(win, text="2. ", font="Lato 17 bold")
-run_script_num.pack(pady=(0, 75), side="right")
-
-progress_bar = ttk.Progressbar(win, orient="horizontal", length=100,
-                               mode="determinate", value=0)
-progress_bar.pack(side="bottom", pady=(0, 10))
-
-win.mainloop()
+app = MainApplication()
+app.mainloop()
