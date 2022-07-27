@@ -39,5 +39,9 @@ pip install tk
 
 ## Screenshots
 
-<img alt="NaviFile demo" src="navifile-demo.png"/>
+### Home Page
+<img alt="NaviFile demo" src="home-demo.png"/>
+
+### Main Page
+<img alt="NaviFile demo" src="main-demo.png"/>
 
