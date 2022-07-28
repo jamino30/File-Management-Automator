@@ -1,4 +1,4 @@
-# NaviFile - A file management automator for macOS and selfdows
+# NaviFile - A file management automator for macOS and Windows
 # Designed and built by Jai Amin
 
 from tkinter import ttk, filedialog
@@ -55,7 +55,7 @@ class MainApplication(tk.Tk):
 
 
 class HomePage(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, control):
         tk.Frame.__init__(self, parent)
 
         self.logo_image = tk.PhotoImage(file="logo.png").subsample(2, 2)
@@ -73,104 +73,87 @@ class HomePage(tk.Frame):
         description.pack(pady=(20, 40))
 
         continue_button = ttk.Button(self, text="Enter NaviFile", width=15,
-                                     command=lambda: controller.show_frame(MainPage))
+                                     command=lambda: control.show_frame(MainPage))
         continue_button.pack()
 
 
 class MainPage(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, control):
         tk.Frame.__init__(self, parent)
-        self.controller = controller
+        self.control = control
 
         label = tk.Label(self, text="Takes only 3 steps...", font="Lato 18 bold")
         label.pack(pady=(25, 0))
 
         self.logo_image = tk.PhotoImage(file="logo.png").subsample(5, 5)
         logo_main = ttk.Label(self, image=self.logo_image)
-        logo_main.pack()
         logo_main.place(relx=0.02, rely=0.02)
 
         get_dir_num = ttk.Label(self, text="1.", font="Lato 17 bold")
-        get_dir_num.pack()
         get_dir_num.place(relx=0.1, rely=0.2)
 
         get_dir_num_desc = ttk.Label(self, text="Choose a folder whose files you would like to organize "
                                                 "based on all the file's true extensions.",
                                      font="Lato 15", wraplength=515)
-        get_dir_num_desc.pack()
         get_dir_num_desc.place(relx=0.15, rely=0.2)
 
         self.get_dir_button = ttk.Button(self, text="Choose folder", width=15,
                                          command=self.get_dir)
-        self.get_dir_button.pack()
         self.get_dir_button.place(relx=0.15, rely=0.32)
 
         # initialize with empty text in order to replace text when directory changes
         self.get_dir_label = ttk.Label(self, text="", font="Lato 14 bold")
 
         run_script_num = ttk.Label(self, text="2.", font="Lato 17 bold")
-        run_script_num.pack()
         run_script_num.place(relx=0.1, rely=0.45)
 
         run_script_num_desc = ttk.Label(self, text="Indicate whether or not you would like to organize all files "
                                                    "inside all first level subfolders in your selected folder.",
                                         font="Lato 15", wraplength=515)
-        run_script_num_desc.pack()
         run_script_num_desc.place(relx=0.15, rely=0.45)
 
         self.var1 = tk.IntVar()
         include_subf = ttk.Checkbutton(self, text="Include subfolders", variable=self.var1, onvalue=1, offvalue=0)
-        include_subf.pack()
         include_subf.place(relx=0.15, rely=0.57)
 
         run_script_num = ttk.Label(self, text="3.", font="Lato 17 bold")
-        run_script_num.pack()
         run_script_num.place(relx=0.1, rely=0.7)
 
         run_script_button_desc = ttk.Label(self, text="Before you \"Make changes\", confirm your selected folder.\n"
                                                       "Any changes made are irreversible.",
                                            font="Lato 15", wraplength=515)
-        run_script_button_desc.pack()
         run_script_button_desc.place(relx=0.15, rely=0.7)
 
         # when button clicked, file_manager() script runs
         self.run_script_button = ttk.Button(self, text="Complete step 1", width=15,
                                             command=lambda: [self.file_manager(self.dir_name),
-                                                             self.success_actions()])
-        self.run_script_button.pack()
+                                                             control.show_frame(LogPage)])
         self.run_script_button.state(["disabled"])
         self.run_script_button.place(relx=0.15, rely=0.821)
 
         self.success_message = ttk.Label(self, text="", font="Lato 14 bold")
-
-        self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=100, mode="determinate", value=0)
-        self.progress_bar.pack(side="bottom")
 
     def get_dir(self):
         # ask user to select directory and display selection as label
         self.dir_name = filedialog.askdirectory(mustexist=True)
         short_dir_name = "📂 " + self.dir_name.split("/")[-1]
 
-        self.run_script_button["text"] = "Make changes"
-        self.run_script_button.configure(command=lambda: [self.file_manager(self.dir_name),
-                                                          self.success_actions()])
-
         if self.dir_name == "":
             short_dir_name = ""
-            self.progress_bar["value"] = 0
             self.run_script_button.state(["disabled"])
             self.run_script_button["text"] = "Complete step 1"
         else:
-            self.progress_bar["value"] = 50
             self.run_script_button.state(["!disabled"])
+            self.run_script_button["text"] = "Make changes"
 
         self.get_dir_label["text"] = short_dir_name
-        self.get_dir_label.pack()
         self.get_dir_label.place(relx=0.43, rely=0.3279)
         self.success_message["text"] = ""
 
         # change button features once directory selected
         self.get_dir_button["text"] = "Change folder"
+
+        return self.dir_name
 
     def file_manager(self, directory):
         # finds user home directory and gets desired directory
@@ -234,37 +217,35 @@ class MainPage(tk.Frame):
 
     def success_actions(self):
         call(["open", self.dir_name])
-        self.progress_bar["value"] = 100
-        self.success_message["text"] = "Changes made successfully ✅"
-        self.success_message.place(relx=0.43, rely=0.829)
-
-        # replace run script with view log button
-        self.run_script_button["text"] = "View log"
-        self.run_script_button.configure(command=lambda: self.controller.show_frame(LogPage))
 
 
 class LogPage(tk.Frame):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, control):
         tk.Frame.__init__(self, parent)
 
-        label = tk.Label(self, text="NaviFile Log", font="Lato 18 bold")
+        label = tk.Label(self, text="Changes updated successfully ✅", font="Lato 18 bold")
         label.pack(pady=(25, 0))
 
         self.logo_image = tk.PhotoImage(file="logo.png").subsample(5, 5)
         log_logo = ttk.Label(self, image=self.logo_image)
-        log_logo.pack()
         log_logo.place(relx=0.02, rely=0.02)
+
+        label2 = tk.Label(self, text="NaviFile Log", font="Lato 15 bold")
+        label2.place(relx=0.0435, rely=0.163)
 
         # insert log data
         mylist = tk.Listbox(self, width=70, height=15)
         for line in range(100):
             mylist.insert("end", "This is line number " + str(line))
-
         mylist.pack(pady=(50, 0))
 
-        back_button = ttk.Button(self, text="Go back", width=15,
-                                 command=lambda: controller.show_frame(MainPage))
-        back_button.pack(side="bottom", pady=(0, 20))
+        back_button = ttk.Button(self, text="View changes", width=25,)
+                                 # command=call(["open", self.dir_name]))
+        back_button.pack(side="left", pady=(0, 10), padx=(33, 0))
+
+        back_button2 = ttk.Button(self, text="Go back", width=25,
+                                  command=lambda: control.show_frame(MainPage))
+        back_button2.pack(side="right", pady=(0, 10), padx=(0, 33))
 
 
 if __name__ == "__main__":
