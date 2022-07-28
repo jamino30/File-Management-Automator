@@ -41,7 +41,7 @@ class MainApplication(tk.Tk):
 
         # initialize frames
         self.frames = {}
-        for F in (HomePage, MainPage):
+        for F in (HomePage, MainPage, LogPage):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -72,7 +72,7 @@ class HomePage(tk.Frame):
                                 font="Lato 16", wraplength=430, justify="center")
         description.pack(pady=(20, 40))
 
-        continue_button = ttk.Button(self, text="Enter NaviFile",
+        continue_button = ttk.Button(self, text="Enter NaviFile", width=15,
                                      command=lambda: controller.show_frame(MainPage))
         continue_button.pack()
 
@@ -80,6 +80,7 @@ class HomePage(tk.Frame):
 class MainPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        self.controller = controller
 
         label = tk.Label(self, text="Takes only 3 steps...", font="Lato 18 bold")
         label.pack(pady=(25, 0))
@@ -233,6 +234,16 @@ class MainPage(tk.Frame):
         self.progress_bar["value"] = 100
         self.success_message["text"] = "Changes made successfully ✅"
         self.success_message.place(relx=0.43, rely=0.829)
+
+        # replace run script with view log button
+        self.run_script_button["text"] = "View log"
+        self.run_script_button.configure(command=lambda: self.controller.show_frame(LogPage))
+
+
+class LogPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        pass
 
 
 if __name__ == "__main__":
