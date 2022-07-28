@@ -20,6 +20,11 @@ class MainApplication(tk.Tk):
         self.title("NaviFile - File Management Made Easy")
         self.iconphoto(False, tk.PhotoImage(file="logo.png"))
 
+        # configure widget styling
+        s = ttk.Style()
+        s.configure("TButton", font="Lato 15")
+        s.configure("TCheckbutton", font="Lato 14")
+
         # configure window sizing
         self_width = 700
         self_height = 450
@@ -63,8 +68,8 @@ class HomePage(tk.Frame):
         description = ttk.Label(self,
                                 text="NaviFile is a file management automator for macOS and Windows that makes "
                                      "it easy to organize and navigate through a large variety of files based "
-                                     "on its hexadecimal signatures (rather than its \"extension\").",
-                                font="Lato 16", wraplength=400, justify="center")
+                                     "on its true extension.",
+                                font="Lato 16", wraplength=430, justify="center")
         description.pack(pady=(20, 40))
 
         continue_button = ttk.Button(self, text="Enter NaviFile",
@@ -84,7 +89,7 @@ class MainPage(tk.Frame):
         logo_main.pack()
         logo_main.place(relx=0.02, rely=0.02)
 
-        get_dir_num = ttk.Label(self, text="1. ", font="Lato 17 bold")
+        get_dir_num = ttk.Label(self, text="1.", font="Lato 17 bold")
         get_dir_num.pack()
         get_dir_num.place(relx=0.1, rely=0.2)
 
@@ -102,7 +107,7 @@ class MainPage(tk.Frame):
         # initialize with empty text in order to replace text when directory changes
         self.get_dir_label = ttk.Label(self, text="", font="Lato 14 bold")
 
-        run_script_num = ttk.Label(self, text="2. ", font="Lato 17 bold")
+        run_script_num = ttk.Label(self, text="2.", font="Lato 17 bold")
         run_script_num.pack()
         run_script_num.place(relx=0.1, rely=0.45)
 
@@ -117,7 +122,7 @@ class MainPage(tk.Frame):
         include_subf.pack()
         include_subf.place(relx=0.15, rely=0.57)
 
-        run_script_num = ttk.Label(self, text="3. ", font="Lato 17 bold")
+        run_script_num = ttk.Label(self, text="3.", font="Lato 17 bold")
         run_script_num.pack()
         run_script_num.place(relx=0.1, rely=0.7)
 
@@ -133,7 +138,7 @@ class MainPage(tk.Frame):
                                                              self.success_actions()])
         self.run_script_button.pack()
         self.run_script_button.state(["disabled"])
-        self.run_script_button.place(relx=0.15, rely=0.83)
+        self.run_script_button.place(relx=0.15, rely=0.821)
 
         self.success_message = ttk.Label(self, text="", font="Lato 14 bold")
 
@@ -157,7 +162,7 @@ class MainPage(tk.Frame):
 
         self.get_dir_label["text"] = short_dir_name
         self.get_dir_label.pack()
-        self.get_dir_label.place(relx=0.41, rely=0.3275)
+        self.get_dir_label.place(relx=0.43, rely=0.3279)
         self.success_message["text"] = ""
 
         # change button features once directory selected
@@ -227,7 +232,7 @@ class MainPage(tk.Frame):
         call(["open", self.dir_name])
         self.progress_bar["value"] = 100
         self.success_message["text"] = "Changes made successfully ✅"
-        self.success_message.place(relx=0.41, rely=0.8375)
+        self.success_message.place(relx=0.43, rely=0.829)
 
 
 if __name__ == "__main__":
