@@ -95,7 +95,7 @@ class MainPage(tk.Frame):
         get_dir_num.place(relx=0.1, rely=0.2)
 
         get_dir_num_desc = ttk.Label(self, text="Choose a folder whose files you would like to organize "
-                                                "based on all the file's true extensions",
+                                                "based on all the file's true extensions.",
                                      font="Lato 15", wraplength=515)
         get_dir_num_desc.pack()
         get_dir_num_desc.place(relx=0.15, rely=0.2)
@@ -128,7 +128,7 @@ class MainPage(tk.Frame):
         run_script_num.place(relx=0.1, rely=0.7)
 
         run_script_button_desc = ttk.Label(self, text="Before you \"Make changes\", confirm your selected folder.\n"
-                                                      "Any changes made are irreversible once made.",
+                                                      "Any changes made are irreversible.",
                                            font="Lato 15", wraplength=515)
         run_script_button_desc.pack()
         run_script_button_desc.place(relx=0.15, rely=0.7)
@@ -151,6 +151,10 @@ class MainPage(tk.Frame):
         self.dir_name = filedialog.askdirectory(mustexist=True)
         short_dir_name = "📂 " + self.dir_name.split("/")[-1]
 
+        self.run_script_button["text"] = "Make changes"
+        self.run_script_button.configure(command=lambda: [self.file_manager(self.dir_name),
+                                                          self.success_actions()])
+
         if self.dir_name == "":
             short_dir_name = ""
             self.progress_bar["value"] = 0
@@ -159,7 +163,6 @@ class MainPage(tk.Frame):
         else:
             self.progress_bar["value"] = 50
             self.run_script_button.state(["!disabled"])
-            self.run_script_button["text"] = "Make changes"
 
         self.get_dir_label["text"] = short_dir_name
         self.get_dir_label.pack()
@@ -187,13 +190,13 @@ class MainPage(tk.Frame):
                 # open and read each file in binary format
                 try:
                     with open(full_file, "rb") as f:
-                        content = f.read()
+                        content = f.read()[:4]
                 except RecursionError:
                     continue
 
                 # convert file binary to hex signatures
                 try:
-                    hex_bin = str(bin.hexlify(content))[2:10].upper()
+                    hex_bin = str(bin.hexlify(content))[2:-1].upper()
                 except KeyError:
                     print(f"Error reading the {file}")
 
@@ -243,7 +246,25 @@ class MainPage(tk.Frame):
 class LogPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        pass
+
+        label = tk.Label(self, text="NaviFile Log", font="Lato 18 bold")
+        label.pack(pady=(25, 0))
+
+        self.logo_image = tk.PhotoImage(file="logo.png").subsample(5, 5)
+        log_logo = ttk.Label(self, image=self.logo_image)
+        log_logo.pack()
+        log_logo.place(relx=0.02, rely=0.02)
+
+        # insert log data
+        mylist = tk.Listbox(self, width=70, height=15)
+        for line in range(100):
+            mylist.insert("end", "This is line number " + str(line))
+
+        mylist.pack(pady=(50, 0))
+
+        back_button = ttk.Button(self, text="Go back", width=15,
+                                 command=lambda: controller.show_frame(MainPage))
+        back_button.pack(side="bottom", pady=(0, 20))
 
 
 if __name__ == "__main__":
