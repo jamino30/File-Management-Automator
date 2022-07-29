@@ -173,7 +173,7 @@ class MainPage(tk.Frame):
                 # open and read each file in binary format
                 try:
                     with open(full_file, "rb") as f:
-                        content = f.read()[:4]
+                        content = f.read(4)
                 except RecursionError:
                     continue
 
