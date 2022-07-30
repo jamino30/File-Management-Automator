@@ -18,7 +18,7 @@ class MainApplication(tk.Tk):
 
         # set window title and icon
         self.title("NaviFile - File Management Made Easy")
-        self.iconphoto(False, tk.PhotoImage(file="logo.png"))
+        self.iconphoto(False, tk.PhotoImage(file="/Users/jamino/Pictures/navifile/logo.png"))
 
         # configure widget styling
         s = ttk.Style()
@@ -58,7 +58,7 @@ class HomePage(tk.Frame):
     def __init__(self, parent, control):
         tk.Frame.__init__(self, parent)
 
-        self.logo_image = tk.PhotoImage(file="logo.png").subsample(2, 2)
+        self.logo_image = tk.PhotoImage(file="/Users/jamino/Pictures/navifile/logo.png").subsample(2, 2)
         logo_home = ttk.Label(self, image=self.logo_image)
         logo_home.pack(pady=(50, 35))
 
@@ -85,7 +85,7 @@ class MainPage(tk.Frame):
         label = tk.Label(self, text="Takes only 3 steps...", font="Lato 18 bold")
         label.pack(pady=(25, 0))
 
-        self.logo_image = tk.PhotoImage(file="logo.png").subsample(5, 5)
+        self.logo_image = tk.PhotoImage(file="/Users/jamino/Pictures/navifile/logo.png").subsample(5, 5)
         logo_main = ttk.Label(self, image=self.logo_image)
         logo_main.place(relx=0.02, rely=0.02)
 
@@ -157,7 +157,7 @@ class MainPage(tk.Frame):
 
     def file_manager(self, directory):
         # finds user home directory and gets desired directory
-        parent_dir = f"{directory}/"
+        parent_dir = os.path.join(directory, "")
         dir_files = os.listdir(parent_dir)
 
         # ignore .DS_Store and .localized Mac files
@@ -209,7 +209,7 @@ class MainPage(tk.Frame):
             except IsADirectoryError:
                 try:
                     if self.var1.get() == 1:
-                        sub_parent = f"{self.dir_name}/{file}"
+                        sub_parent = os.path.join(self.dir_name, file)
                         self.file_manager(sub_parent)
                 except FileNotFoundError:
                     continue
@@ -226,7 +226,7 @@ class LogPage(tk.Frame):
         label = tk.Label(self, text="Changes updated successfully ✅", font="Lato 18 bold")
         label.pack(pady=(25, 0))
 
-        self.logo_image = tk.PhotoImage(file="logo.png").subsample(5, 5)
+        self.logo_image = tk.PhotoImage(file="/Users/jamino/Pictures/navifile/logo.png").subsample(5, 5)
         log_logo = ttk.Label(self, image=self.logo_image)
         log_logo.place(relx=0.02, rely=0.02)
 
