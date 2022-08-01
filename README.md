@@ -9,34 +9,6 @@ through a large variety of files based on its hexadecimal signatures (rather tha
 
 Built with Tkinter and deployed with Pyinstaller.
 
-## Build Installations
-
-### 1. Install pip via get-pip.py
-
-1. Check that Python3 is installed
-
-```ps
-python3 --version
-```
-
-2. Download pip
-
-```
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-```
-
-3. Install the downloaded package
-
-```ps
-python3 get-pip.py
-```
-
-### 2. Install Tkinter via pip
-
-```ps
-pip install tk
-```
-
 ## Screenshots
 
 ### Home Page
