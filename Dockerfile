@@ -8,5 +8,5 @@ RUN apt-get update -y
 RUN apt-get install tk -y
 
 # Commands to run Tkinter application
-CMD ["/app/main.py"]
+CMD ["main.py"]
 ENTRYPOINT ["python3"]
