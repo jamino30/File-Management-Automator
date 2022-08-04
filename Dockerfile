@@ -1,11 +1,13 @@
-# Latest version of Python
-FROM python:latest
+#syntax=docker/dockerfile:1
 
-# Download Package Information
+FROM python
+
+WORKDIR .
+
+COPY . .
+
 RUN apt-get update -y
-
-# Install Tkinter
 RUN apt-get install tk -y
 
-# Commands to run Tkinter application
-CMD [ "python3", "./main.py"]
+
+CMD [ "python3", "./main.py" ]
